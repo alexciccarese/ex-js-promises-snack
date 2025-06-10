@@ -3,8 +3,12 @@
 /* 🎯 Bonus: HOF con closure per memorizzare l'ultimo lancio
 Modifica la funzione in creaLanciaDado(), che restituisce una closure che memorizza l'ultimo risultato. Se il numero esce due volte di fila, stampa "Incredibile!". */
 
-function lanciaDado() {
-  return new Promise((resolve, reject) => {
+function creaLanciaDado() {
+
+  let ultimoLancio = null
+  
+  return function() {
+    return new Promise((resolve, reject) => {
     console.log("Lanciando il dado...")
 
     setTimeout(() => {
@@ -12,15 +16,27 @@ function lanciaDado() {
       if(incastrato) {
         reject("Il dado si è incastrato! Riprova")
       } else {
-        const risultato = Math.floor(Math.random() * 6) +1
+        const risultato = Math.floor(Math.random() * 6) + 1
+        if(risultato === ultimoLancio) {
+          console.log("Incredibile!");
+          
+        }
+        ultimoLancio = risultato
         resolve(risultato)
       }
     }, 3000);
     
   })
+  }
 
 }
 
-lanciaDado()
-  .then(risultato => console.log(`Il dado ha lanciato:`, risultato))
+const memoriaLancio =  creaLanciaDado()
+
+memoriaLancio()
+  .then(risultato => { console.log(`Il dado ha lanciato:`, risultato)
+memoriaLancio()
+.then(risultato => console.log(`Il dado ha lanciato:`, risultato))
   .catch(error => console.error(error))
+})
+.catch(err => console.error(err))
